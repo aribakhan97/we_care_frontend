@@ -6,9 +6,23 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Moods</h1>
-    <div id="moods-container"></div>
-    <script src="src/index.js"></script>    
-    <div id = "moodButton"></div>
+    <h1 id="all-moods">All Moods</h1> 
+    <div id="all-moods-container"></div>
+    
+    <h1 id="new moods">New Moods</h1>
+   
+    
+        <div>
+            <ul id="new-moods-list">
+                
+            </ul>
+        </div>
+    <form id="new-mood-form">
+        <label for="mood">From 1-10, how are you feeling? (1 = really bad, 10 = ecstatic)</label>
+        <br>
+        <input type="number" id="new-mood-level" name="mood">
+        <input type="submit" value="submit">
+    </form>
+    <script src="src/index.js"></script>
 </body>
 </html>
