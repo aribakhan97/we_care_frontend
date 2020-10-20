@@ -113,10 +113,45 @@ document.addEventListener('DOMContentLoaded', () => {
             quoteDiv.append(quoteText, authorText)
             moodDiv.append(quoteDiv)
         }
+
+        const getMoodBoosterPic = () => {
+            return fetch('https://random.dog/woof.json')
+            .then(response => response.json())
+        }
+
+        const showPic = () => {
+            getMoodBoosterPic()
+            .then(data => {
+                console.log(data)
+                const imgDiv = document.querySelector('#mood-booster-div')
+                const img = document.createElement('img')
+                img.src = data.url
+                img.width = 500
+                img.height = 6000
+                imgDiv.append(img)
+            })
+        }
+
+    const instantMoodBoost = () =>{
+        const imgDiv = document.createElement('div')
+        imgDiv.id = 'mood-booster-div'
+
+        const moodBoostButton = document.createElement('button')
+        moodBoostButton.innerHTML = 'Click Here for an INSTANT MOOD BOOST!'
+        moodBoostButton.addEventListener('click', e => {
+            showPic()
+        })
+        imgDiv.appendChild(moodBoostButton)
+
+        moodDiv.appendChild(imgDiv)
+
+    }
+
     var isUserLoggedIn = false 
     const renderApp = () => {
         if(isUserLoggedIn === true) {
-            getMoods()
+            instantMoodBoost()
+            //getMoods()
             displayMoodButton()
             displayQuotes()
         }
