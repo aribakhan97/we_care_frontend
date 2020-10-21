@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const MOODS_URL = "http://localhost:3000/moods/"
 
     function getMoods(){
+        const moodsDiv = document.querySelector('#all-moods-container')
+        moodsDiv.innerHTML = ""
         fetch(MOODS_URL)
             .then(response => response.json())
             .then(moods => renderMoods(moods))
@@ -35,21 +37,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 const nowDate = new Date(Date.now())
                 const date = nowDate.toISOString()
                 const jDate = nowDate.toJSON()
-                console.log(typeof(jDate))
                 const form = e.target
-                const newMood = {mood_level: parseInt(form.mood.value), date: jDate, user_id: 1}
+                const newMood = {mood_level: parseInt(form.mood.value), date: nowDate, user_id: 1}
                 const options = {
                     method: "POST",
                     headers: {
                         "content-type": "application/json",
                         "accept": "application/json"
                     },
-                    body: JSON.stringify({ mood_level: parseInt(form.mood.value), date: nowDate.toJSON(), user_id: 1 })
+                    body: JSON.stringify(newMood)
                 }
                 fetch(MOODS_URL, options)
                     .then(response => response.json())
-                    .then(newMood => renderNewMood(newMood))
+                    .then(_newMood => 
+                        makeChart())
 
+                
                 form.reset()
             }
         })
@@ -58,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const renderNewMood = (newMood) => {
         const nowDate = new Date(newMood.date)
         const date = nowDate.toDateString()
-        console.log(date)
         const newMoodList = document.querySelector("#new-moods-list")
         const newMoodLi = document.createElement("li")
         newMoodLi.textContent = `New Mood: ${newMood.mood_level}, Date: ${date}`
@@ -70,16 +72,14 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json())
             .then(moods => {
                 let data = populateData(moods)
-                console.log(data)
                 var ctx = document.getElementById('myChart');
                 var myChart = new Chart(ctx, {
                     type: 'line',
                     data: {
-                        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Sept", "Oct", "Nov", "Dec"],
                         datasets: [{
                             label: 'Mood Level',
                             fill: false,
-                            borderColor: 'red',
+                            borderColor: 'blue',
                             data: data,
                             backgroundColor: [
                                 'rgba(255, 99, 132, 0.2)',
@@ -109,7 +109,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                     unit: "month",
                                     distribution: 'linear',
                                     bounds: "data",
-                                    min: "September, 2019"
+                                    min: "September, 2019",
+                                    max: "December, 2020"
                                     },
                                 scaleLabel: {
                                     display: true,
@@ -133,11 +134,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const populateData = (moods) => {
                 let data = []
                 for (const mood of moods) {
-                    let dumbDate = new Date(mood.date)
-                    let date = dumbDate.toUTCString()
+                    let date = new Date(mood.date)
                     data.push({x: date, y: mood.mood_level})
                 }
-                return data
+                const sortedData = data.sort((a, b) => b.x - a.x)
+                return sortedData
             }
         
     }
