@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch(MOODS_URL)
             .then(response => response.json())
             .then(moods => renderMoods(moods))
+            .then(makeChart)
     }
 
     const renderMoods = (moods) => {
@@ -18,51 +19,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const renderMood = (moodObj) => {
         const moodLi = document.createElement("li")
-        moodLi.textContent = `Mood: ${moodObj.mood_level} Date: ${moodObj.created_at}`
+        const newDate = new Date(moodObj.date)
+        const date = newDate.toDateString()
+        // let cleanDate = (new Date(date)).toLocaleDateString("en-US", options)
+        moodLi.textContent = `Mood: ${moodObj.mood_level} Date: ${date}`
         moodList.append(moodLi)
         moodDiv.append(moodList)
     }
 
-    // const displayMoodButton = () => {
-    //     const moodButtonDiv = document.querySelector('#moodButton')
-    //     for (i = 1; i < 11; i++) {
-    //         var moodButton = document.createElement('button')
-    //         moodButton.innerHTML = i 
-    //         moodButton.addEventListener('click', (e) => {
-    //             console.log(e.target.innerHTML)
-    //             // do post to /mood with button value as a mood level
-    //             const data = {mood_level: e.target.innerHTML, user_id: 1}
-
-    //             fetch(MOODS_URL, {
-    //                 method: 'POST', 
-    //                 headers: {
-    //                 'Content-Type': 'application/json',
-    //                 },
-    //                 body: JSON.stringify(data),
-    //             })
-    //             .then(() => getMoods())
-    //         })
-    //         moodButtonDiv.append(moodButton)
-    //     }
-    // }
-    
-    // function clickHandler({
-        
-    // })
 
     function submitHandler(){
         document.addEventListener('submit', e => {
             if (e.target.matches("#new-mood-form")){
                 e.preventDefault()
+                const nowDate = new Date(Date.now())
+                const date = nowDate.toISOString()
+                const jDate = nowDate.toJSON()
+                console.log(typeof(jDate))
                 const form = e.target
-                const newMood = {mood_level: parseInt(form.mood.value), user_id: 1}
+                const newMood = {mood_level: parseInt(form.mood.value), date: jDate, user_id: 1}
                 const options = {
                     method: "POST",
                     headers: {
                         "content-type": "application/json",
                         "accept": "application/json"
                     },
-                    body: JSON.stringify(newMood)
+                    body: JSON.stringify({ mood_level: parseInt(form.mood.value), date: nowDate.toJSON(), user_id: 1 })
                 }
                 fetch(MOODS_URL, options)
                     .then(response => response.json())
@@ -74,10 +56,90 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const renderNewMood = (newMood) => {
+        const nowDate = new Date(newMood.date)
+        const date = nowDate.toDateString()
+        console.log(date)
         const newMoodList = document.querySelector("#new-moods-list")
         const newMoodLi = document.createElement("li")
-        newMoodLi.textContent = `New Mood: ${newMood.mood_level}`
+        newMoodLi.textContent = `New Mood: ${newMood.mood_level}, Date: ${date}`
         newMoodList.append(newMoodLi)
+    }
+
+    const makeChart = () => {
+        let moods = fetch(MOODS_URL)
+            .then(response => response.json())
+            .then(moods => {
+                let data = populateData(moods)
+                console.log(data)
+                var ctx = document.getElementById('myChart');
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Sept", "Oct", "Nov", "Dec"],
+                        datasets: [{
+                            label: 'Mood Level',
+                            fill: false,
+                            borderColor: 'red',
+                            data: data,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            xAxes: [{
+                                type: 'time',
+                                time: {
+                                    displayFormats: {month: "MMM YY"},
+                                    unit: "month",
+                                    distribution: 'linear',
+                                    bounds: "data",
+                                    min: "September, 2019"
+                                    },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Time'
+                                }
+                            }],
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Mood Level'
+                                }
+                            }]
+                        }
+                    }
+                });
+            } )
+
+            const populateData = (moods) => {
+                let data = []
+                for (const mood of moods) {
+                    let dumbDate = new Date(mood.date)
+                    let date = dumbDate.toUTCString()
+                    data.push({x: date, y: mood.mood_level})
+                }
+                return data
+            }
+        
     }
     // clickHandler()
     submitHandler()

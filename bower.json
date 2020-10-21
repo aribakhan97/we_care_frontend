@@ -1,0 +1,22 @@
+{
+  "name": "bower.json",
+  "homepage": "https://github.com/jakeFromm/we_care_frontend",
+  "authors": [
+    "jakeFromm <jacobfromm@gmail.com>"
+  ],
+  "description": "bower file",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "chart.js": "^2.9.4",
+    "jquery": "^3.5.1"
+  }
+}
