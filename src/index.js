@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const moodDiv = document.querySelector("#moods-container")
     const moodList = document.createElement("ul")
     const MOODS_URL = "http://localhost:3000/moods"
+    const activitiesUrl = 'http://localhost:3000/activities'
 
     function getMoods(){
         fetch(MOODS_URL)
@@ -123,27 +124,42 @@ document.addEventListener('DOMContentLoaded', () => {
             getMoodBoosterPic()
             .then(data => {
                 console.log(data)
-                const imgDiv = document.querySelector('#mood-booster-div')
-                const img = document.createElement('img')
-                img.src = data.url
-                img.width = 500
-                img.height = 6000
-                imgDiv.append(img)
+                const imgDiv = document.querySelector('#mood-booster-img')
+                imgDiv.innerHTML = ' '
+                const dataUrl = data.url.toLowerCase()
+                if(dataUrl.endsWith('jpg') || dataUrl.endsWith('gif') || dataUrl.endsWith('png') || dataUrl.endsWith('jpeg')) {
+                    const img = document.createElement('img')
+                    img.src = data.url
+                    img.width = 500
+                    img.height = 600
+                    imgDiv.append(img)
+                }
+                else {
+                    const video = document.createElement('video')
+                    video.width = 500
+                    video.height = 600 
+                    video.autoplay = true 
+                    const videoSrc = document.createElement('source')
+                    videoSrc.src = data.url
+                    video.appendChild(videoSrc)
+                    imgDiv.append(video)
+                }
             })
         }
 
     const instantMoodBoost = () =>{
+        const mbDiv = document.createElement('div')
+        mbDiv.id = 'mood-booster-div'
         const imgDiv = document.createElement('div')
-        imgDiv.id = 'mood-booster-div'
-
+        imgDiv.id = 'mood-booster-img'
         const moodBoostButton = document.createElement('button')
         moodBoostButton.innerHTML = 'Click Here for an INSTANT MOOD BOOST!'
         moodBoostButton.addEventListener('click', e => {
             showPic()
         })
-        imgDiv.appendChild(moodBoostButton)
+        mbDiv.append(moodBoostButton, imgDiv)
 
-        moodDiv.appendChild(imgDiv)
+        moodDiv.appendChild(mbDiv)
 
     }
 
@@ -154,10 +170,44 @@ document.addEventListener('DOMContentLoaded', () => {
             //getMoods()
             displayMoodButton()
             displayQuotes()
+            activityButton()
         }
         else{
             createLogin()
         }
     }
+    const getActivities = () => {
+        fetch(activitiesUrl)
+        .then(response => response.json())
+        .then(Activity => renderActivity(Activity))
+    }
+
+    const renderActivity = (activities) => {
+        const showActivity = document.querySelector('#activity-list')
+        showActivity.innerHTML = ' '
+        const displaySingleActivity = document.createElement('ul')
+        activities.forEach((activity) => {
+            const activityItem = document.createElement('li')
+            activityItem.innerHTML = (activity.name)
+
+            displaySingleActivity.append(activityItem)
+            console.log(activity)
+            
+        })
+        showActivity.append(displaySingleActivity)
+    }
+    const activityButton = () => {
+        const renderActButton = document.querySelector('#activity-container')
+        const activityList = document.createElement('div')
+        activityList.id = 'activity-list'
+        const actButton = document.createElement('button')
+        actButton.innerHTML = 'Click Here to see Activities!'
+        actButton.addEventListener('click', e => {
+            getActivities()
+        })
+        renderActButton.append(actButton, activityList)
+    }
+
+
     renderApp()
 })
