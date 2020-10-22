@@ -171,6 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
             displayMoodButton()
             displayQuotes()
             activityButton()
+            hotlineButton()
         }
         else{
             createLogin()
@@ -208,6 +209,43 @@ document.addEventListener('DOMContentLoaded', () => {
         renderActButton.append(actButton, activityList)
     }
 
+    const hotlineButton = () => {
+        const rendenrHotButton = document.querySelector('#hotline-container')
+        const hotlineList = document.createElement('div')
+        const hotButton = document.createElement('button')
+        hotButton.innerHTML = 'Emergency? Click Here for Immediate Help.'
+        hotButton.addEventListener('click', e => {
 
+            const emergency = document.createElement('h4')
+            emergency.innerHTML = 'The Nationwide Emergency Number in the U.S. is 911'
+
+            const suicideHotline = document.createElement('h4')
+            suicideHotline.innerHTML = 'National Suicide Prevention Lifeline: 800-273-8255'
+
+            const crisisText = document.createElement('h4')
+            crisisText.innerHTML = 'Crisis Text Line Text “HELLO” to 741741'
+
+            hotlineList.append(emergency, suicideHotline,crisisText)
+            rendenrHotButton.append(hotlineList)
+
+        })
+        rendenrHotButton.append(hotButton)
+    }
+    const modalTriggers = document.querySelectorAll('.popup-trigger')
+    const modalCloseTrigger = document.querySelector('.popup-modal__close')
+    const bodyBlackout = document.querySelector('.body-blackout')
+    modalTriggers.forEach(trigger => {
+        trigger.addEventListener('click', () => {
+        const { popupTrigger } = trigger.dataset
+        const popupModal = document.querySelector(`[data-popup-modal="${popupTrigger}"]`)
+        popupModal.classList.add('is--visible')
+        bodyBlackout.classList.add('is-blacked-out')
+    
+        popupModal.querySelector('.popup-modal__close').addEventListener('click', () => {
+            popupModal.classList.remove('is--visible')
+            bodyBlackout.classList.remove('is-blacked-out')
+        })
+    })
+})
     renderApp()
 })
