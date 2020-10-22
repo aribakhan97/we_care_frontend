@@ -74,8 +74,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 fetch(ACTIVITIES_URL, options)
                     .then(response => response.json())
-                    .then(getActivities())
-                    .then(console.log(actArr[actArr.length]))
+                    .then(_activity =>
+                        getActivities()
+                        )
+    
                 form.reset()
             }
         })
@@ -201,6 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return Math.floor(Math.random() * Math.floor(max));
     }
     const getActivities = () => {
+        actArr = []
         fetch(ACTIVITIES_URL)
             .then(response => response.json())
             .then(activities => renderActivities(activities))
@@ -215,6 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const actText = document.querySelector('#random-act-text')
         actText.textContent = actArr[getRandomInt(actArr.length)]
+        console.log(actArr)
     }
 
     // const renderActivity = (activities) => {
