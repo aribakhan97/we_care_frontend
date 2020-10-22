@@ -102,7 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 let activitiesArr = user.activities
                 let moodData = populateData(moodsArr)
                 let activityData = populateData(activitiesArr)
-                // let activityData = populateData(activities)
                 var ctx = document.getElementById('myChart');
                 var myChart = new Chart(ctx, {
                     type: 'line',
@@ -131,7 +130,27 @@ document.addEventListener('DOMContentLoaded', () => {
                             borderWidth: 2
                         }, 
                         {
-
+                                label: 'Activities',
+                                fill: false,
+                                borderColor: 'blue',
+                                data: activityData,
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(255, 206, 86, 0.2)',
+                                    'rgba(75, 192, 192, 0.2)',
+                                    'rgba(153, 102, 255, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)'
+                                ],
+                                borderWidth: 2
                         }
                     ]
                     },
@@ -191,9 +210,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log(sortedData)
                     return sortedData
                 } else if (arr[0].name) {
-                    // function counter(arr, dateValue) {
-
-                    // }
+                    let data = []
+                    for (const activity of arr){
+                        let dateCount = 0
+                            let counter = 0
+                            for (i = 0; i < arr.length; i++) {
+                                if (arr[i].date == activity.date) { counter++ }
+                            }
+                            dateCount = counter
+                        
+                        let date = new Date(activity.date)
+                        let activityObj = {}
+                        data.push({ x: date, y: dateCount, id: activity.id})
+                    }
+                    const sortedData = data.sort((a, b) => b.x - a.x)
+                    return sortedData
                     // for (const activity of arr) {
                     //     let date = new Date(activity.date)
                     //     let activityObj = ({})
@@ -416,7 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const crisisText = document.createElement('h4')
             crisisText.innerHTML = 'Crisis Text Line Text “HELLO” to 741741'
 
-            hotlineList.append(emergency, suicideHotline, crisisText)
+            hotlineList.append(emergency, xsuicideHotline, crisisText)
             rendenrHotButton.append(hotlineList)
 
         })
