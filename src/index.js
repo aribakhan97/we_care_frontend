@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const moodList = document.createElement("ul")
     const MOODS_URL = "http://localhost:3000/moods/"
     const ACTIVITIES_URL = 'http://localhost:3000/activities/'
+    const MAIN_USER_URL = "http://localhost:3000/users/1"
     let actArr = []
 
     // const background = document.body
@@ -11,9 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function getMoods(){
         const moodsDiv = document.querySelector('#all-moods-container')
         moodsDiv.innerHTML = ""
-        fetch(MOODS_URL)
+        fetch(MAIN_USER_URL)
             .then(response => response.json())
-            // .then(moods => renderMoods(moods))
+            .then(user => renderMoods(user.moods))
             .then(makeChart)
     }
 
@@ -93,10 +94,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const makeChart = () => {
-        let moods = fetch(MOODS_URL)
+        let moods = fetch(MAIN_USER_URL)
             .then(response => response.json())
-            .then(moods => {
-                let data = populateData(moods)
+            .then(user => {
+                console.log(user);
+                let moodsArr = user.moods
+                let activitiesArr = user.activities
+                let moodData = populateData(moodsArr)
+                let activityData = populateData(activitiesArr)
+                // let activityData = populateData(activities)
                 var ctx = document.getElementById('myChart');
                 var myChart = new Chart(ctx, {
                     type: 'line',
@@ -105,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             label: 'Mood Level',
                             fill: false,
                             borderColor: 'blue',
-                            data: data,
+                            data: moodData,
                             backgroundColor: [
                                 'rgba(255, 99, 132, 0.2)',
                                 'rgba(54, 162, 235, 0.2)',
@@ -122,8 +128,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                 'rgba(153, 102, 255, 1)',
                                 'rgba(255, 159, 64, 1)'
                             ],
-                            borderWidth: 1
-                        }]
+                            borderWidth: 2
+                        }, 
+                        {
+
+                        }
+                    ]
                     },
                     options: {
                         scales: {
@@ -170,14 +180,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } )
 
-            const populateData = (moods) => {
-                let data = []
-                for (const mood of moods) {
-                    let date = new Date(mood.date)
-                    data.push({x: date, y: mood.mood_level, id: mood.id})
+            const populateData = (arr) => {
+                if (arr[0].mood_level) {
+                    let data = []
+                    for (const mood of arr) {
+                        let date = new Date(mood.date)
+                        data.push({ x: date, y: mood.mood_level, id: mood.id })
+                    }
+                    const sortedData = data.sort((a, b) => b.x - a.x)
+                    console.log(sortedData)
+                    return sortedData
+                } else if (arr[0].name) {
+                    let data = []
+                    for (const activity of arr) {
+                        let date = new Date(activity.date)
+                        let activityObj = ({})
+                        data.push({ x: date, y: activity.mood_level, id: activity.id })
+                    }
+                    // const sortedData = data.sort((a, b) => b.x - a.x)
+                    // return sortedData
+                    // --- need to create an array that has number of activities per day as y axis, date as x axis, label shows all activities that day
                 }
-                const sortedData = data.sort((a, b) => b.x - a.x)
-                return sortedData
             }
         
     }
