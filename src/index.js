@@ -191,12 +191,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log(sortedData)
                     return sortedData
                 } else if (arr[0].name) {
-                    let data = []
-                    for (const activity of arr) {
-                        let date = new Date(activity.date)
-                        let activityObj = ({})
-                        data.push({ x: date, y: activity.mood_level, id: activity.id })
-                    }
+                    // function counter(arr, dateValue) {
+
+                    // }
+                    // for (const activity of arr) {
+                    //     let date = new Date(activity.date)
+                    //     let activityObj = ({})
+                    //     data.push({ x: date, y: activity.mood_level, id: activity.id })
+                    // }
                     // const sortedData = data.sort((a, b) => b.x - a.x)
                     // return sortedData
                     // --- need to create an array that has number of activities per day as y axis, date as x axis, label shows all activities that day
@@ -267,8 +269,179 @@ document.addEventListener('DOMContentLoaded', () => {
     //     renderActButton.append(actButton, activityList)
     // }
 
+    const createLogin = () => {
+        const loginDiv = document.querySelector('#login-container')
+        const loginTitle = document.createElement('h1')
+        loginTitle.innerHTML = 'Welcome to WeCare!'
+        const loginSubtitle = document.createElement('h4')
+        loginSubtitle.innerHTML = 'We aspire to help individuals of all backgrounds to achieve wellness of the mind, body, and soul. It is never too late to start taking care of yourself. Please login to continue.'
+
+
+        var form = document.createElement("form");
+
+        var user = document.createElement("input");
+        user.setAttribute("type", "text");
+        user.setAttribute("name", "Username");
+        user.setAttribute("placeholder", "Username");
+
+
+        var pwd = document.createElement("input");
+        pwd.setAttribute("type", "text");
+        pwd.setAttribute("name", "Password");
+        pwd.setAttribute("placeholder", "Password");
+
+        var s = document.createElement("input");
+        s.setAttribute("type", "submit");
+        s.setAttribute("value", "Submit");
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault()
+            handleLogin(e)
+        })
+
+        form.append(user, pwd, s)
+
+        loginDiv.append(loginTitle, loginSubtitle, form)
+
+    }
+    const handleLogin = (e) => {
+        const username = e.target.elements.Username.value
+        const password = e.target.elements.Password.value
+        if (username === 'Sean_Padden' && password === '1234') {
+            isUserLoggedIn = true
+            const LoginDiv = document.querySelector('#login-container')
+            LoginDiv.innerHTML = ' '
+            renderApp()
+        }
+    }
+    const getQuotes = () => {
+        const quotesUrl = 'https://type.fit/api/quotes'
+        return fetch(quotesUrl)
+            .then(response => response.json())
+            .then(data => {
+                const rand = Math.floor(Math.random() * data.length)
+                return data[rand]
+            })
+    }
+    const displayQuotes = async () => {
+        const quote = await getQuotes()
+        console.log(quote)
+        const quoteDiv = document.createElement('div')
+        quoteDiv.id = 'quote-div'
+        const quoteText = document.createElement('h2')
+        quoteText.innerHTML = quote.text
+
+        const authorText = document.createElement('h3')
+        authorText.innerHTML = '-' + quote.author
+
+        quoteDiv.append(quoteText, authorText)
+        moodDiv.append(quoteDiv)
+    }
+
+    const getMoodBoosterPic = () => {
+        return fetch('https://random.dog/woof.json')
+            .then(response => response.json())
+    }
+
+    const showPic = () => {
+        getMoodBoosterPic()
+            .then(data => {
+                console.log(data)
+                const imgDiv = document.querySelector('#mood-booster-img')
+                imgDiv.innerHTML = ' '
+                const dataUrl = data.url.toLowerCase()
+                if (dataUrl.endsWith('jpg') || dataUrl.endsWith('gif') || dataUrl.endsWith('png') || dataUrl.endsWith('jpeg')) {
+                    const img = document.createElement('img')
+                    img.src = data.url
+                    img.width = 500
+                    img.height = 600
+                    imgDiv.append(img)
+                }
+                else {
+                    const video = document.createElement('video')
+                    video.width = 500
+                    video.height = 600
+                    video.autoplay = true
+                    const videoSrc = document.createElement('source')
+                    videoSrc.src = data.url
+                    video.appendChild(videoSrc)
+                    imgDiv.append(video)
+                }
+            })
+    }
+
+    const instantMoodBoost = () => {
+        const mbDiv = document.createElement('div')
+        mbDiv.id = 'mood-booster-div'
+        const imgDiv = document.createElement('div')
+        imgDiv.id = 'mood-booster-img'
+        const moodBoostButton = document.createElement('button')
+        moodBoostButton.innerHTML = 'Click Here for an INSTANT MOOD BOOST!'
+        moodBoostButton.addEventListener('click', e => {
+            showPic()
+        })
+        mbDiv.append(moodBoostButton, imgDiv)
+
+        moodDiv.appendChild(mbDiv)
+
+    }
+
+    var isUserLoggedIn = false
+    const renderApp = () => {
+        if (isUserLoggedIn === true) {
+            instantMoodBoost()
+            //getMoods()
+            // displayMoodButton()
+            displayQuotes()
+            // activityButton()
+            hotlineButton()
+        }
+        else {
+            createLogin()
+        }
+    }
+    const hotlineButton = () => {
+        const rendenrHotButton = document.querySelector('#hotline-container')
+        const hotlineList = document.createElement('div')
+        const hotButton = document.createElement('button')
+        hotButton.innerHTML = 'Emergency? Click Here for Immediate Help.'
+        hotButton.addEventListener('click', e => {
+
+            const emergency = document.createElement('h4')
+            emergency.innerHTML = 'The Nationwide Emergency Number in the U.S. is 911'
+
+            const suicideHotline = document.createElement('h4')
+            suicideHotline.innerHTML = 'National Suicide Prevention Lifeline: 800-273-8255'
+
+            const crisisText = document.createElement('h4')
+            crisisText.innerHTML = 'Crisis Text Line Text “HELLO” to 741741'
+
+            hotlineList.append(emergency, suicideHotline, crisisText)
+            rendenrHotButton.append(hotlineList)
+
+        })
+        rendenrHotButton.append(hotButton)
+    }
+    const modalTriggers = document.querySelectorAll('.popup-trigger')
+    const modalCloseTrigger = document.querySelector('.popup-modal__close')
+    const bodyBlackout = document.querySelector('.body-blackout')
+    modalTriggers.forEach(trigger => {
+        trigger.addEventListener('click', () => {
+            const { popupTrigger } = trigger.dataset
+            const popupModal = document.querySelector(`[data-popup-modal="${popupTrigger}"]`)
+            popupModal.classList.add('is--visible')
+            bodyBlackout.classList.add('is-blacked-out')
+
+            popupModal.querySelector('.popup-modal__close').addEventListener('click', () => {
+                popupModal.classList.remove('is--visible')
+                bodyBlackout.classList.remove('is-blacked-out')
+            })
+        })
+    })
+
     clickHandler()
     submitHandler()
     getMoods()
     getActivities()
+    renderApp()
 })
