@@ -1,0 +1,25 @@
+.container {
+  position: relative;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#bg {
+   position: fixed;
+  background-size: cover;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+#container {
+    z-index: 2;
+}
+
+#content {
+    position: relative;
+}
