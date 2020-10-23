@@ -1,29 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/styles.css">
-    
     <title>WeCare</title>
 </head>
+
 <body>
-<div id="container">
-    <h1>Welcome to WeCare</h1>
-    <div id="bg">
-    </div>
-    <div id="content">
-        <div id="login-container"></div>
-        <div id="hotline-container"></div>
-        <!-- body overlay -->
+    <div id="container">
+        <h1 class="font center">Welcome to WeCare</h1>
+        <div id="bg">
+        </div>
         <div class="body-blackout"></div>
-        <!-- Modals Triggers -->
-        <br>
-        <button type="button" class="btn btn-sm btn-primary shadow p-2 px-3 popup-trigger" data-popup-trigger="one">
-            Emergency? Click Here
-        </button>
-        
-        
+        <div id="login-container"></div>
+        <div id="content">
+            <div id="hotline-container"></div>
+            <div id="quote-div" class="quote-font"></div>
+
+            <!-- body overlay -->
+            <!-- Modals Triggers -->
+            <br>
+            <div id="all-moods-container">
+            </div>
+            <div id="activities-container">
+                <h2>Explore Self Care Activities:</h2>
+                <p id="random-act-text" style="font-style: italic;"></p>
+                <div class="padding-down">
+                    <button class="white-button" id="new-act-btn">Keep Exploring</button>
+                    <button class="act-btn" id="act-confirm-btn">I'll do this one!</button>
+                </div>
+                <form id="new-activity-form">
+                    <label for="activity"><strong>Add a Self Care Activity Here! </strong></label>
+                    <br>
+                    <input class="input-text-short" type="text" id="new-activity-name" name="activity">
+                    <input class="mood-boost-button" type="submit" value="Submit">
+                </form>
+            </div>
+
+
+
+            <div>
+                <ul id="new-moods-list">
+
+                </ul>
+            </div>
+            <form id="new-mood-form">
+                <h1 id="new-moods">Track Your Mood</h1>
+                <label for="mood">On a scale of 1 to 10, how are you feeling? (1 = Horrible, 10 = Ecstatic)</label>
+                <br>
+                <input type="number" id="new-mood-level" name="mood">
+                <input class="mood-boost-button" type="submit" value="Submit">
+            </form>
+
+            <div class="container">
+                <div id="edit-mood-div" class="center">
+
+                </div>
+            </div>
+            <canvas id="myChart" width="400" height="400"></canvas>
+        </div>
+
         <!-- Modals -->
         <div class="popup-modal shadow" data-popup-modal="one">
             <i class="fas fa-2x fa-times text-white bg-primary p-3 popup-modal__close"></i>
@@ -35,53 +73,31 @@
             <a href='https://suicidepreventionlifeline.org/'> Click Here for Link </a>
             <h4> Crisis Text Line Text “HELLO” to 741741 </h4>
             <a href='https://www.crisistextline.org/'> Click here for Link </a>
-        
-        </div>
-        <div id="all-moods-container">
 
         </div>
-        <div id="activities-container">
-            <h2>Here's a self-care idea:</h2>
-            <p id="random-act-text" style="font-style: italic;"></p>
-            <button class="act-btn" id="new-act-btn">Not in the mood. Got anything else?</button> <button id="act-confirm-btn">Yeah,
-                let's do that!</button> 
-            <br><br>    
-            <form id="new-activity-form">
-                <label for="activity"><strong>Don't like our options? Save your favorite self-care activities here!</strong></label>
-                <br>
-                <input type="text" id="new-activity-name" name="activity">
-                <input type="submit" value="submit">
-            </form>
+
+        <div id="mood-booster-modal" class="popup-modal shadow mood-booster-modal" data-popup-modal="mood-booster">
+            <i class="fas fa-2x fa-times text-white bg-primary p-3 popup-modal__close"></i>
+            <div id="mood-booster-img"></div>
         </div>
 
-
-        <h1 id="new moods">New Moods</h1>
-
-        <div>
-            <ul id="new-moods-list">
-
-            </ul>
-        </div>
-        <form id="new-mood-form">
-            <label for="mood">From 1-10, how are you feeling? (1 = really bad, 10 = ecstatic)</label>
-            <br>
-            <input type="number" id="new-mood-level" name="mood">
-            <input type="submit" value="submit">
-        </form>
-
-        <div class="container">
-            <div id="edit-mood-div" class="center">
-
-            </div>
-        </div>
-        <canvas id="myChart" width="400" height="400"></canvas>
+        <button type="button" class="btn btn-sm btn-primary shadow p-2 px-3 popup-trigger emergency-button"
+            data-popup-trigger="one">
+            Emergency? Click Here
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-heart-fill" fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                    d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
+            </svg>
+        </button>
     </div>
-</div>
-    
+
     <script src="node_modules/chart.js/dist/Chart.bundle.js"></script>
     <script src="src/index.js"></script>
-    <!-- <script data-who="💎 Made with naker.io 💎" src="https://d23jutsnau9x47.cloudfront.net/back/v1.0.9/viewer.js"
+    <script data-who="💎 Made with naker.io 💎" src="https://d23jutsnau9x47.cloudfront.net/back/v1.0.9/viewer.js"
         data-option="{|environment|:{|gradient|:|horizontal|,|sensitivity|:0.25,|colorStart|:[255,212,252,1],|colorEnd|:[99,147,233,1]},|particle|:{|life|:5,|power|:0.005,|texture|:|https://res.cloudinary.com/naker-io/image/upload/v1566560053/heart_01.png|,|number|:623,|colorStart|:[147,22,22,0.13],|colorEnd|:[198,107,107,0.52],|sizeStart|:2,|sizeEnd|:4,|direction1|:{|x|:0,|y|:100,|z|:0},|direction2|:{|x|:0,|y|:0,|z|:0}},|waterMark|:false}"
-        data-container="#container"></script> -->
+        data-container="bg"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital@1&display=swap" rel="stylesheet">
 </body>
+
 </html>

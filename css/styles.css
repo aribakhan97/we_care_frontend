@@ -9,8 +9,8 @@
 }
 
 #bg {
-   position: fixed;
-  background-size: cover;
+  position: fixed;
+  background-size: auto;
   left: 0;
   right: 0;
   z-index: 1;
@@ -32,15 +32,16 @@ html {
   box-sizing: inherit; }
 
 html, body {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Libre Baskerville', serif;
   padding: 0;
   margin: 0; }
 
 body {
   background-color: #f6f6f6;
   min-height: 100vh;
-  height: 100vh;
+  height: auto;
   padding: 35px;
+  background: url('https://animal-wallpaper.com/wallpaper/white-gold-ombre-wallpapers-desktop-background-For-Background-HD-Wallpaper.jpg');
   position: relative; }
 
 a {
@@ -63,12 +64,12 @@ a {
   display: inline-block; }
 
 .popup-modal {
-  height: 365px;
+  height: auto;
   width: 650px;
   background-color: #fff;
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 20%;
   transform: translate(-50%, -50%);
   padding: 45px;
   opacity: 0;
@@ -78,11 +79,139 @@ a {
   .popup-modal.is--visible {
     opacity: 1;
     pointer-events: auto; }
+    
   .popup-modal__close {
     position: absolute;
     font-size: 1.2rem;
     right: -10px;
     top: -10px;
     cursor: pointer; }
+
+.font{
+    font-family: 'Libre Baskerville', serif;
+    font-size: 50px;
+    color: black
+}
+
+.center {
+  text-align: center;
+}
+
+.font-subtitle {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 25px;
+  color:black
+}
+
+.quote-font {
+  font-family:"Zapf Chancery", cursive;
+  font-size: 30px;
+}
+
+.mood-boost-button {
+  background-color: #c21474; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  font-family: 'Libre Baskerville', serif;
+}
+
+.float-right {
+  float: right
+}
+
+.white-button {
+  background-color: white; /* Green */
+  border: 10px;
+  border-color: palevioletred;
+  color: black;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  font-family: 'Libre Baskerville', serif;
+  float: left;
+}
+
+.emergency-button {
+  background-color: firebrick; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  float: left;
+  font-family: 'Libre Baskerville', serif;
+}
+.act-btn {
+  background-color: #c21474; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  float: left;
+  font-family: 'Libre Baskerville', serif;
+}
+
+.login-button {
+  background-color: black; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  float: right;
+  font-family: 'Libre Baskerville', serif;
+}
+
+#new-mood-form {
+  float: right;
+}
+
+.padding-down {
+  padding-bottom: 100px;
+}
+
+input[type=text] {
+  width: 60%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+.input-text-short {
+  width: 40% !important;
+}
+
+input[type=password] {
+  width: 60%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+input[type=number] {
+  width: 40%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+#random-act-text {
+  font-size: 20px;
+  font-family: 'Libre Baskerville', serif;
+}
 
 /*# sourceMappingURL=styles.css.map */

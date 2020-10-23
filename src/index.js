@@ -20,20 +20,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const renderMoods = (moods) => {
-        moodDiv.innerHTML = ' '
+        //moodDiv.innerHTML = ' '
         moods.forEach(moodObj => {
             renderMood(moodObj)
         })
     }
 
     const renderMood = (moodObj) => {
-        const moodLi = document.createElement("li")
-        const newDate = new Date(moodObj.date)
-        const date = newDate.toDateString()
-        // let cleanDate = (new Date(date)).toLocaleDateString("en-US", options)
-        moodLi.textContent = `Mood: ${moodObj.mood_level} Date: ${date}`
-        moodList.append(moodLi)
-        moodDiv.append(moodList)
+        // const moodLi = document.createElement("li")
+        // const newDate = new Date(moodObj.date)
+        // const date = newDate.toDateString()
+        // // let cleanDate = (new Date(date)).toLocaleDateString("en-US", options)
+        // //moodLi.textContent = `Mood: ${moodObj.mood_level} Date: ${date}`
+        // moodList.append(moodLi)
+        // moodDiv.append(moodList)
     }
 
 
@@ -338,14 +338,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const createLogin = () => {
         const loginDiv = document.querySelector('#login-container')
-        const loginTitle = document.createElement('h1')
-        loginTitle.innerHTML = 'Welcome to WeCare!'
         const loginSubtitle = document.createElement('h4')
         loginSubtitle.innerHTML = 'We aspire to help individuals of all backgrounds to achieve wellness of the mind, body, and soul. It is never too late to start taking care of yourself. Please login to continue.'
-
-
+        loginSubtitle.className = "font-subtitle"
         var form = document.createElement("form");
-
+        form.className = "center"
         var user = document.createElement("input");
         user.setAttribute("type", "text");
         user.setAttribute("name", "Username");
@@ -353,14 +350,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         var pwd = document.createElement("input");
-        pwd.setAttribute("type", "text");
+        pwd.setAttribute("type", "password");
         pwd.setAttribute("name", "Password");
         pwd.setAttribute("placeholder", "Password");
 
         var s = document.createElement("input");
         s.setAttribute("type", "submit");
         s.setAttribute("value", "Submit");
-
+        s.className = "login-button"
         form.addEventListener('submit', (e) => {
             e.preventDefault()
             handleLogin(e)
@@ -368,7 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         form.append(user, pwd, s)
 
-        loginDiv.append(loginTitle, loginSubtitle, form)
+        loginDiv.append(loginSubtitle, form)
 
     }
     const handleLogin = (e) => {
@@ -392,16 +389,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const displayQuotes = async () => {
         const quote = await getQuotes()
-        const quoteDiv = document.createElement('div')
-        quoteDiv.id = 'quote-div'
+        const quoteDiv = document.querySelector('#quote-div')
         const quoteText = document.createElement('h2')
         quoteText.innerHTML = quote.text
-
+        quoteText.className = "center"
         const authorText = document.createElement('h3')
         authorText.innerHTML = '-' + quote.author
+        authorText.className = "center"
 
         quoteDiv.append(quoteText, authorText)
-        moodDiv.append(quoteDiv)
     }
 
     const getMoodBoosterPic = () => {
@@ -410,10 +406,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const showPic = () => {
+        console.log("showPic called")
         getMoodBoosterPic()
             .then(data => {
+                const mbModal = document.querySelector('#mood-booster-modal')
                 const imgDiv = document.querySelector('#mood-booster-img')
                 imgDiv.innerHTML = ' '
+                imgDiv.className = 'center'
                 const dataUrl = data.url.toLowerCase()
                 if (dataUrl.endsWith('jpg') || dataUrl.endsWith('gif') || dataUrl.endsWith('png') || dataUrl.endsWith('jpeg')) {
                     const img = document.createElement('img')
@@ -432,81 +431,67 @@ document.addEventListener('DOMContentLoaded', () => {
                     video.appendChild(videoSrc)
                     imgDiv.append(video)
                 }
+                console.log(imgDiv)
+                console.log(mbModal)
+                mbModal.appendChild(imgDiv)
+                console.log(mbModal)
             })
     }
 
+    const smile = `
+    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-emoji-smile" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+        <path fill-rule="evenodd" d="M4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683z"/>
+        <path d="M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
+    </svg>
+    `
     const instantMoodBoost = () => {
-        const mbDiv = document.createElement('div')
-        mbDiv.id = 'mood-booster-div'
-        const imgDiv = document.createElement('div')
-        imgDiv.id = 'mood-booster-img'
         const moodBoostButton = document.createElement('button')
-        moodBoostButton.innerHTML = 'Click Here for an INSTANT MOOD BOOST!'
-        moodBoostButton.addEventListener('click', e => {
-            showPic()
-        })
-        mbDiv.append(moodBoostButton, imgDiv)
-
-        moodDiv.appendChild(mbDiv)
-
+        moodBoostButton.innerHTML = smile + '  Click Here for an INSTANT MOOD BOOST!  ' + smile
+        moodBoostButton.className = "btn btn-sm btn-primary shadow p-2 px-3 mood-boost-button float-right popup-trigger"
+        moodBoostButton.setAttribute("data-popup-trigger", "mood-booster")
+        moodDiv.append(moodBoostButton)
     }
 
     var isUserLoggedIn = false
     const renderApp = () => {
+        const contentDiv = document.querySelector('#content')
         if (isUserLoggedIn === true) {
+            clickHandler()
+            submitHandler()
+            getMoods()
+            getActivities()
             instantMoodBoost()
-            //getMoods()
-            // displayMoodButton()
+            createModalTriggers()
             displayQuotes()
-            // activityButton()
-            hotlineButton()
-        }
-        else {
+            contentDiv.style.visibility = 'visible'
+        } else {
             createLogin()
+            contentDiv.style.visibility = 'hidden'        
         }
     }
-    const hotlineButton = () => {
-        const rendenrHotButton = document.querySelector('#hotline-container')
-        const hotlineList = document.createElement('div')
-        const hotButton = document.createElement('button')
-        hotButton.innerHTML = 'Emergency? Click Here for Immediate Help.'
-        hotButton.addEventListener('click', e => {
+    const createModalTriggers = () => {
+        const modalTriggers = document.querySelectorAll('.popup-trigger')
+        const modalCloseTrigger = document.querySelector('.popup-modal__close')
+        const bodyBlackout = document.querySelector('.body-blackout')
+        modalTriggers.forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                console.log("trigger called")
+                const { popupTrigger } = trigger.dataset
+                const popupModal = document.querySelector(`[data-popup-modal="${popupTrigger}"]`)
+                popupModal.classList.add('is--visible')
+                bodyBlackout.classList.add('is-blacked-out')
+                if (popupModal.classList.contains('mood-booster-modal')) {
+                    showPic()
+                }
 
-            const emergency = document.createElement('h4')
-            emergency.innerHTML = 'The Nationwide Emergency Number in the U.S. is 911'
-
-            const suicideHotline = document.createElement('h4')
-            suicideHotline.innerHTML = 'National Suicide Prevention Lifeline: 800-273-8255'
-
-            const crisisText = document.createElement('h4')
-            crisisText.innerHTML = 'Crisis Text Line Text “HELLO” to 741741'
-
-            hotlineList.append(emergency, xsuicideHotline, crisisText)
-            rendenrHotButton.append(hotlineList)
-
-        })
-        rendenrHotButton.append(hotButton)
-    }
-    const modalTriggers = document.querySelectorAll('.popup-trigger')
-    const modalCloseTrigger = document.querySelector('.popup-modal__close')
-    const bodyBlackout = document.querySelector('.body-blackout')
-    modalTriggers.forEach(trigger => {
-        trigger.addEventListener('click', () => {
-            const { popupTrigger } = trigger.dataset
-            const popupModal = document.querySelector(`[data-popup-modal="${popupTrigger}"]`)
-            popupModal.classList.add('is--visible')
-            bodyBlackout.classList.add('is-blacked-out')
-
-            popupModal.querySelector('.popup-modal__close').addEventListener('click', () => {
-                popupModal.classList.remove('is--visible')
-                bodyBlackout.classList.remove('is-blacked-out')
+                popupModal.addEventListener('click', () => {
+                    popupModal.classList.remove('is--visible')
+                    bodyBlackout.classList.remove('is-blacked-out')
+                })
             })
         })
-    })
+    }
 
-    clickHandler()
-    submitHandler()
-    getMoods()
-    getActivities()
     renderApp()
 })
