@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 'rgba(255, 159, 64, 0.2)'
                             ],
                             borderColor: [
-                                'rgba(255, 99, 132, 1)',
+                                " rgba(145, 61, 136, 1)",
                                 'rgba(54, 162, 235, 1)',
                                 'rgba(255, 206, 86, 1)',
                                 'rgba(75, 192, 192, 1)',
@@ -155,14 +155,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     ]
                     },
                     options: {
-                        onClick: (e, item) => {
-                            // const button = document.createElement("button")
-                            // button.textContent = "Delete Mood"
-                            // const editMoodDiv = document.querySelector("#edit-mood-div")
-                            // editMoodDiv.append(button)
-                            // console.log(myChart.data.datasets)
-                           
-                        },
+                        responseive: true,
+                        maintainAspectRatio: true,
                         scales: {
                             xAxes: [{
                                 type: 'time',

@@ -2,6 +2,12 @@
   position: relative;
 }
 
+.chart-container {
+    width: 1000px;
+    height: 600px;
+
+}
+
 .center {
   display: flex;
   justify-content: center;
