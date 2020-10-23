@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ACTIVITIES_URL = 'http://localhost:3000/activities/'
     const MAIN_USER_URL = "http://localhost:3000/users/1"
     let actArr = []
+    
 
     // const background = document.body
     // background.classList.add("background-image")
@@ -76,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 fetch(ACTIVITIES_URL, options)
                     .then(response => response.json())
                     .then(_activity =>
-                        getActivities()
+                        makeChart()
                         )
     
                 form.reset()
@@ -97,7 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let moods = fetch(MAIN_USER_URL)
             .then(response => response.json())
             .then(user => {
-                console.log(user);
                 let moodsArr = user.moods
                 let activitiesArr = user.activities
                 let moodData = populateData(moodsArr)
@@ -200,6 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } )
 
             const populateData = (arr) => {
+                let actData = []
                 if (arr[0].mood_level) {
                     let data = []
                     for (const mood of arr) {
@@ -207,35 +208,55 @@ document.addEventListener('DOMContentLoaded', () => {
                         data.push({ x: date, y: mood.mood_level, id: mood.id })
                     }
                     const sortedData = data.sort((a, b) => b.x - a.x)
-                    console.log(sortedData)
                     return sortedData
                 } else if (arr[0].name) {
-                    let data = []
                     for (const activity of arr){
-                        let dateCount = 0
-                            let counter = 0
-                            for (i = 0; i < arr.length; i++) {
-                                if (arr[i].date == activity.date) { counter++ }
-                            }
-                            dateCount = counter
-                        
+                        let result
                         let date = new Date(activity.date)
-                        let activityObj = {}
-                        data.push({ x: date, y: dateCount, id: activity.id})
+                        let goodDate = date.toLocaleDateString()
+                        if ((actData.find((obj) => obj.x == goodDate)) == undefined) {
+                            actData.push({ x: goodDate, y: 1, id: activity.id })
+                        } else {
+                            result = actData.find((obj) => obj.x == goodDate)
+                            result.y++
+                        }
                     }
-                    const sortedData = data.sort((a, b) => b.x - a.x)
-                    return sortedData
-                    // for (const activity of arr) {
-                    //     let date = new Date(activity.date)
-                    //     let activityObj = ({})
-                    //     data.push({ x: date, y: activity.mood_level, id: activity.id })
-                    // }
-                    // const sortedData = data.sort((a, b) => b.x - a.x)
+                    for (const act of actData){
+                        act.x = new Date(act.x)
+                    }
+                    const sortedActData = actData.sort((a, b) => b.x-a.x)
+                    return sortedActData
+                    // const sortByYear = data.sort((a, b) =>{
+                    //     return parseInt(b.x.split("/")[2]) - parseInt(a.x.split("/")[2])
+                    // })
+                    // const sortByMonth = sortByYear.sort((a, b) =>{
+                    //     return parseInt(b.x.split("/")[0]) - parseInt(a.x.split("/")[0])
+                    // })
+                    // const sortByDay = sortByMonth.sort((a, b) => {
+                    //     return parseInt(b.x.split("/")[1]) - parseInt(a.x.split("/")[1])
+                    // })
+                    // console.log(sortByDay)
+                    // const sortedData = data.sort(function (a, b) {
+                    //     parseInt(b.x.split("/")[2] + b.x.split("/")[0] + b.x.split("/")[1]) -
+                    //     parseInt(a.x.split("/")[2] + a.x.split("/")[0] + a.x.split("/")[1])
+                    // })
+                    // console.log(parseInt(data[0].x.split("/")[2] + data[0].x.split("/")[0] + data[0].x.split("/")[1]))
+                    // console.log(sortedData)
                     // return sortedData
-                    // --- need to create an array that has number of activities per day as y axis, date as x axis, label shows all activities that day
                 }
             }
         
+    }
+    function dateToNum(d) {
+        d = d.split("/"); return Number(d[2] + d[0] + d[1])
+    }
+
+    function getOccurrence(array, value) {
+        let counter = 0
+        for (i = 0; i < array.length; i++) {
+            if (array[i].date == value) { counter++ }
+        }
+        return counter
     }
 
     function clickHandler(){
@@ -274,7 +295,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const actText = document.querySelector('#random-act-text')
         actText.textContent = actArr[getRandomInt(actArr.length)]
-        console.log(actArr)
     }
 
     // const renderActivity = (activities) => {
@@ -356,7 +376,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const displayQuotes = async () => {
         const quote = await getQuotes()
-        console.log(quote)
         const quoteDiv = document.createElement('div')
         quoteDiv.id = 'quote-div'
         const quoteText = document.createElement('h2')
@@ -377,7 +396,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const showPic = () => {
         getMoodBoosterPic()
             .then(data => {
-                console.log(data)
                 const imgDiv = document.querySelector('#mood-booster-img')
                 imgDiv.innerHTML = ' '
                 const dataUrl = data.url.toLowerCase()
