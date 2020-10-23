@@ -273,6 +273,22 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (e.target.matches("#new-act-btn")) {
                 const actText = document.querySelector('#random-act-text')
                 actText.textContent = actArr[getRandomInt(actArr.length)]
+            } else if (e.target.matches("#act-confirm-btn")) {
+                const nowDate = new Date(Date.now())
+                const actText = document.querySelector('#random-act-text').textContent
+                const newAct = { name: actText, date: nowDate, user_id: 1 }
+                const options = {
+                    method: "POST",
+                    headers: {
+                        "content-type": "application/json",
+                        "accept": "application/json"
+                    },
+                    body: JSON.stringify(newAct)
+                }
+                fetch(ACTIVITIES_URL, options)
+                    .then(response => response.json())
+                    .then(_newAct =>
+                        makeChart())
             }
         })
     }
