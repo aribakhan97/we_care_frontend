@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     ]
                     },
                     options: {
-                        responseive: true,
+                        responsive: true,
                         maintainAspectRatio: true,
                         scales: {
                             xAxes: [{
