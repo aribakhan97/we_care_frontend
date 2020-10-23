@@ -136,6 +136,7 @@ a {
   display: block;
   font-size: 16px;
   font-family: 'Libre Baskerville', serif;
+  float: left;
 }
 .delete-activity-btn {
   background-color: #c21474; /* Green */
@@ -241,6 +242,9 @@ input[type=number] {
 #random-act-text {
   font-size: 20px;
   font-family: 'Libre Baskerville', serif;
+}
+#edit-element-div {
+  padding-top: 160px;
 }
 
 /*# sourceMappingURL=styles.css.map */
