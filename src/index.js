@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 },
                                 scaleLabel: {
                                     display: true,
-                                    labelString: 'Mood Level'
+                                    labelString: 'Moods and Activities'
                                 }
                             }]
                         }
