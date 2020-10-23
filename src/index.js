@@ -489,13 +489,13 @@ document.addEventListener('DOMContentLoaded', () => {
             getMoods()
             getActivities()
             instantMoodBoost()
-            createModalTriggers()
             displayQuotes()
             contentDiv.style.visibility = 'visible'
         } else {
             createLogin()
             contentDiv.style.visibility = 'hidden'        
         }
+        createModalTriggers()
     }
     const createModalTriggers = () => {
         const modalTriggers = document.querySelectorAll('.popup-trigger')
