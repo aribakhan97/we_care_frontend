@@ -125,6 +125,19 @@ a {
   display: block;
   font-size: 16px;
   font-family: 'Libre Baskerville', serif;
+  float: right;
+}
+
+.submit-activity-btn {
+    background-color: #c21474; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  font-family: 'Libre Baskerville', serif;
 }
 .delete-mood-btn {
   background-color: #c21474; /* Green */
@@ -206,8 +219,14 @@ a {
   font-family: 'Libre Baskerville', serif;
 }
 
+#mood-form-container {
+    display: block;
+    text-align: right;
+    float: block;
+}
+
 #new-mood-form {
-  float: right;
+    display: inline-block;
 }
 
 .padding-down {
