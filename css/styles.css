@@ -119,6 +119,28 @@ a {
   font-size: 16px;
   font-family: 'Libre Baskerville', serif;
 }
+.delete-mood-btn {
+  background-color: #c21474; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  font-family: 'Libre Baskerville', serif;
+}
+.delete-activity-btn {
+  background-color: #c21474; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  font-family: 'Libre Baskerville', serif;
+}
 
 .float-right {
   float: right

@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const date = nowDate.toISOString()
                 const jDate = nowDate.toJSON()
                 const form = e.target
-                const newMood = {mood_level: parseInt(form.mood.value), date: nowDate, user_id: 1}
+                const newMood = {mood_level: parseInt(form.mood.value), date: nowDate, category: "mood", user_id: 1}
                 const options = {
                     method: "POST",
                     headers: {
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.preventDefault()
                 const nowDate = new Date(Date.now())
                 const form = e.target
-                const newAct = {name: form.activity.value, date: nowDate, user_id: 1}
+                const newAct = {name: form.activity.value, date: nowDate, category: "activity", user_id: 1}
 
                 const options = {
                     method: "POST",
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 let moodData = populateData(moodsArr)
                 let activityData = populateData(activitiesArr)
                 var ctx = document.getElementById('myChart');
-                var myChart = new Chart(ctx, {
+                chart_config = {
                     type: 'line',
                     data: {
                         datasets: [{
@@ -155,6 +155,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     ]
                     },
                     options: {
+                        onClick: (e, item) => {
+                            // const button = document.createElement("button")
+                            // button.textContent = "Delete Mood"
+                            // const editMoodDiv = document.querySelector("#edit-mood-div")
+                            // editMoodDiv.append(button)
+                            // console.log(myChart.data.datasets)
+                           
+                        },
                         scales: {
                             xAxes: [{
                                 type: 'time',
@@ -182,22 +190,30 @@ document.addEventListener('DOMContentLoaded', () => {
                             }]
                         }
                     }
-                });
+                }
+                var myChart = new Chart(ctx, chart_config)
                 document.getElementById("myChart").onclick = e => {
                     let activePoints = myChart.getElementsAtEvent(e)
-                    if (activePoints.length > 0) {
-                        let clickedElementIndex = activePoints[0]["_index"]
-                        let label = myChart.data.labels[clickedElementIndex]
-                        let value = myChart.data.datasets[0].data[clickedElementIndex]
+                    let activeElement = myChart.getElementAtEvent(e)
+                    let selectedElement = chart_config.data.datasets[activeElement[0]._datasetIndex].data[activeElement[0]._index]
+                    if (selectedElement.category == "mood") {
                         const button = document.createElement("button")
                         button.textContent = "Delete Mood"
-                        button.dataset.id = myChart.data.datasets[0].data[clickedElementIndex].id
                         button.classList.add("delete-mood-btn")
-                        const editMoodDiv = document.querySelector("#edit-mood-div")
-                        editMoodDiv.append(button)
-                    }   
+                        button.dataset.id = selectedElement.id
+                        const editDiv = document.querySelector("#edit-element-div")
+                        editDiv.append(button)
+                    } else if (selectedElement.category == "activity") {
+                        const button = document.createElement("button")
+                        button.textContent = "Delete Activity"
+                        button.classList.add("delete-activity-btn")
+                        button.dataset.id = selectedElement.id
+                        const editDiv = document.querySelector("#edit-element-div")
+                        editDiv.append(button)
+                    }
                 }
-            } )
+            })
+            }
 
             const populateData = (arr) => {
                 let actData = []
@@ -205,17 +221,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     let data = []
                     for (const mood of arr) {
                         let date = new Date(mood.date)
-                        data.push({ x: date, y: mood.mood_level, id: mood.id })
+                        data.push({ x: date, y: mood.mood_level, category: mood.category, id: mood.id })
                     }
                     const sortedData = data.sort((a, b) => b.x - a.x)
                     return sortedData
                 } else if (arr[0].name) {
+                    console.log(arr)
                     for (const activity of arr){
                         let result
                         let date = new Date(activity.date)
                         let goodDate = date.toLocaleDateString()
                         if ((actData.find((obj) => obj.x == goodDate)) == undefined) {
-                            actData.push({ x: goodDate, y: 1, id: activity.id })
+                            actData.push({ x: goodDate, y: 1, category: activity.category, id: activity.id })
                         } else {
                             result = actData.find((obj) => obj.x == goodDate)
                             result.y++
@@ -246,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         
-    }
+    
     function dateToNum(d) {
         d = d.split("/"); return Number(d[2] + d[0] + d[1])
     }
@@ -270,13 +287,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 fetch(MOODS_URL + moodId, options)
                     .then(_data => makeChart())
                 button.remove()
-            } else if (e.target.matches("#new-act-btn")) {
+            } else if (e.target.matches(".delete-activity-btn")) {
+                const button = e.target
+                const actId = button.dataset.id
+                const options = {
+                    method: "DELETE"
+                }
+                fetch(ACTIVITIES_URL + actId, options)
+                    .then(_data => makeChart())
+                button.remove()
+            }
+            else if (e.target.matches("#new-act-btn")) {
                 const actText = document.querySelector('#random-act-text')
                 actText.textContent = actArr[getRandomInt(actArr.length)]
             } else if (e.target.matches("#act-confirm-btn")) {
                 const nowDate = new Date(Date.now())
                 const actText = document.querySelector('#random-act-text').textContent
-                const newAct = { name: actText, date: nowDate, user_id: 1 }
+                const newAct = { name: actText, date: nowDate, category: "activity", user_id: 1 }
                 const options = {
                     method: "POST",
                     headers: {
