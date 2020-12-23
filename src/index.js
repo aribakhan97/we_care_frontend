@@ -1,9 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     const moodDiv = document.querySelector("#all-moods-container")
     const moodList = document.createElement("ul")
-    const MOODS_URL = "http://localhost:3000/moods/"
-    const ACTIVITIES_URL = 'http://localhost:3000/activities/'
-    const MAIN_USER_URL = "http://localhost:3000/users/1"
+    const BASE_URL = 'https://we-care-backend.herokuapp.com/'
+    const MOODS_URL =  BASE_URL + "moods/"
+    const ACTIVITIES_URL =  BASE_URL + 'activities/'
+    const MAIN_USER_URL =  BASE_URL + "users/1"
     let actArr = []
     
 
